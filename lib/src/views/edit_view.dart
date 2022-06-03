@@ -32,9 +32,10 @@ class _EditViewState extends State<EditView> {
               // TODO: sanitize
               Map data = widget.recIn!.toMap();
               data['Firm'] = mainFields[0];
-              data['Date'] = mainFields[1];
-              data['TotalAmount'] = mainFields[2];
-              data['TotalKdv'] = mainFields[3];
+              data['No'] = mainFields[1];
+              data['Date'] = mainFields[2];
+              data['TotalAmount'] = mainFields[3];
+              data['TotalKdv'] = mainFields[4];
 
               for (int i = 0; i < productFields.length; i++) {
                 final q = productFields[i]['Quantity'];
@@ -61,11 +62,13 @@ class _EditViewState extends State<EditView> {
           title('Main Fields'),
           row('Firm', 0, true),
           divider,
-          row('Date', 1, true),
+          row('No', 1, true),
           divider,
-          row('Total Amount', 2, true),
+          row('Date', 2, true),
           divider,
-          row('TotalKdv', 3, true),
+          row('Total Amount', 3, true),
+          divider,
+          row('TotalKdv', 4, true),
           divider,
           title('Products'),
           ...products(),
