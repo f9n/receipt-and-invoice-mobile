@@ -47,7 +47,7 @@ class _DetailViewState extends State<DetailView> {
   }
 
   compare() {
-    navTo(context, const OcrResult());
+    navTo(context, OcrResult(imageId: widget.recIn!.imageid));
   }
 
   viewImage() {
