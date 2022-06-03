@@ -16,7 +16,7 @@ class _OcrResultState extends State<OcrResult> {
   init() async {
     final url =
         'https://receipt-and-invoice-rest-api.herokuapp.com/api/v1/ocr/receipt';
-    final res = await http.get(Uri.parse(url));
+    final res = await get(Uri.parse(url));
   if (res.statusCode == 200) {
       final items = await json.decode(res.body);
     final item = items.firstWhere((e)=>e['_id']=='6266f75df5bafb7f7b24c182', orElse: () => null);
