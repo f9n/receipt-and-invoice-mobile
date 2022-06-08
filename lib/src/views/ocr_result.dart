@@ -1,7 +1,9 @@
 import 'dart:convert';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:receiptocr/src/controllers/helper.dart';
+import 'package:receiptocr/src/models/recin.dart';
+import 'package:receiptocr/src/views/details.dart';
 
 class OcrResult extends StatefulWidget {
   const OcrResult({Key? key, this.imageId}) : super(key: key);
@@ -11,31 +13,26 @@ class OcrResult extends StatefulWidget {
 }
 
 class _OcrResultState extends State<OcrResult> {
-  String? details;
+  RecIn? recIn;
 
   init() async {
     final url =
         'https://receipt-and-invoice-rest-api.herokuapp.com/api/v1/ocr/receipt/${widget.imageId}';
-    
+
     final res = await get(Uri.parse(url));
     if (res.statusCode == 200) {
       final item = await json.decode(res.body);
-
-      JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-      if(item != null){
-        details = encoder.convert(item);
-      } else {
-        details = 'Not found!';
-      }
-    }
-    else {
-      details = res.reasonPhrase;
+      recIn = RecIn.fromMap(item);
+    } else {
+      recIn = const RecIn();
+      log(res.reasonPhrase);
+      log(res.body);
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {});
-        }
-      });
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -50,12 +47,9 @@ class _OcrResultState extends State<OcrResult> {
       appBar: AppBar(
         title: const Text('Ocr Result'),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: details == null
-            ? const Center(child: CircularProgressIndicator())
-            : Text(details!),
-      ),
+      body: recIn == null
+          ? const Center(child: CircularProgressIndicator())
+          : Details(recIn: recIn),
     );
   }
 }

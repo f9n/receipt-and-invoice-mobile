@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:receiptocr/src/controllers/helper.dart';
 import 'package:receiptocr/src/models/recin.dart';
+import 'package:receiptocr/src/views/details.dart';
 import 'package:receiptocr/src/views/ocr_result.dart';
 
 class DetailView extends StatefulWidget {
@@ -14,15 +13,6 @@ class DetailView extends StatefulWidget {
 }
 
 class _DetailViewState extends State<DetailView> {
-  String details = '';
-  @override
-  void initState() {
-    JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-    details = encoder.convert(widget.recIn!.toMap());
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +29,7 @@ class _DetailViewState extends State<DetailView> {
           ),
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: Text(details),
-      ),
+      body: Details(recIn: widget.recIn),
     );
   }
 
