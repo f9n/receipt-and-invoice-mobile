@@ -10,7 +10,7 @@ class Product {
     this.quantity = 0,
     this.unitprice = '',
     this.ratiokdv = 0,
-    this.category = '',
+    this.category = 'icecek',
   });
 
   factory Product.fromMap(Map<String, dynamic> map) => Product(

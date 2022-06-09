@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receiptocr/src/controllers/gs.dart';
+import 'package:receiptocr/src/models/product.dart';
 import 'package:receiptocr/src/models/recin.dart';
 
 class EditView extends StatefulWidget {
@@ -70,14 +71,36 @@ class _EditViewState extends State<EditView> {
           divider,
           row('TotalKdv', 4, true),
           divider,
-          title('Products'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              title('Products'),
+              IconButton(
+                  onPressed: () {
+                    setState(() {
+                      productFields.add(const Product().toMap());
+                    });
+                  },
+                  icon: const Icon(Icons.add))
+            ],
+          ),
           ...products(),
+          const SizedBox(height: 50),
         ],
       ),
     );
   }
 
   List<Widget> products() {
+    if (productFields.isEmpty) {
+      return [
+        const Center(
+            child: Padding(
+          padding: EdgeInsets.only(top: 25),
+          child: Text('Ürün listesi boş!'),
+        ))
+      ];
+    }
     List<Widget> children = [];
     for (int i = 0; i < productFields.length; i++) {
       children.add(block(productFields[i], i));
@@ -95,11 +118,22 @@ class _EditViewState extends State<EditView> {
       child: Column(
         children: [
           const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: title('Product ${index + 1}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              title('Product ${index + 1}'),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    productFields.remove(map);
+                  });
+                },
+                icon: const Icon(Icons.remove, color: Colors.red),
+              ),
+            ],
           ),
           for (MapEntry x in map.entries) row(x.key, index, false),
+          const SizedBox(height: 15),
         ],
       ),
     );
@@ -125,7 +159,7 @@ class _EditViewState extends State<EditView> {
         child: Row(
           children: [
             SizedBox(
-              width: 60,
+              width: 70,
               child: Text(title),
             ),
             const SizedBox(width: 5),
@@ -158,20 +192,30 @@ class _EditViewState extends State<EditView> {
   }
 
   Widget dropdownButton(title, index) {
-    return DropdownButton<String>(
-      value: productFields[index][title],
-      isExpanded: true,
-      onChanged: (String? newValue) {
-        setState(() {
-          productFields[index][title] = newValue!;
-        });
-      },
-      items: gs.categories.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(7),
+        color: Colors.white,
+      ),
+      child: DropdownButton<String>(
+        value: productFields[index][title],
+        isExpanded: true,
+        underline: const SizedBox.shrink(),
+        onChanged: (String? newValue) {
+          setState(() {
+            productFields[index][title] = newValue!;
+          });
+        },
+        items: gs.categories.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 7),
+              child: Text(value),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 
