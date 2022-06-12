@@ -59,7 +59,7 @@ class _GS {
       headers: {'accept': 'application/json'},
     );
     if (res.statusCode == 200) {
-      return await json.decode(res.body);
+      return await json.decode(utf8.decode(res.bodyBytes));
     }
   }
 
@@ -73,7 +73,7 @@ class _GS {
       body: json.encode(payload),
     );
     if (res.statusCode == 200) {
-      return await json.decode(res.body);
+      return await json.decode(utf8.decode(res.bodyBytes));
     }
   }
 }

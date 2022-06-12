@@ -21,7 +21,7 @@ class _OcrResultState extends State<OcrResult> {
 
     final res = await get(Uri.parse(url));
     if (res.statusCode == 200) {
-      final item = await json.decode(res.body);
+      final item = await json.decode(utf8.decode(res.bodyBytes));
       recIn = RecIn.fromMap(item);
     } else {
       recIn = const RecIn();
